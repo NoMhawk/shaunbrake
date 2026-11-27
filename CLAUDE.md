@@ -21,6 +21,25 @@ The site is plain static HTML and CSS. There is no build step: edit the files in
 
 Every page repeats the same header (logo, menu with a "What we do" drop-down, phone button) and footer (call-to-action band, contact details, services, areas). If you change one, change them all (a search and replace across `site/**/index.html`).
 
+## Hosting
+- Code: GitHub **NoMhawk/shaunbrake** (public). Branch `main`.
+- Cloudflare Pages project **shaunbrake**: Git-connected to that repo, no build command, output folder `site`. Every push to `main` goes live in about a minute. It also serves https://shaunbrake.pages.dev.
+- Custom domains on the Pages project: `shaunbrake.com` and `www.shaunbrake.com` (both Active, SSL enabled). Cloudflare made the proxied DNS records for them (CNAMEs to `shaunbrake.pages.dev`).
+- Redirect rule "www to bare domain": `https://www.shaunbrake.com/*` → `https://shaunbrake.com/${1}`. It is a 301 and keeps the query string. `http://` goes to `https://` with a 301.
+- The domain's DNS moved from Fasthosts to Cloudflare (nameservers `peaches` and `stan.ns.cloudflare.com`) at about 14:47 UTC on 27 Nov 2026 (records in `D:\storage\Claude\Move Domains\shaunbrake.com\`). Before that the site was WordPress on Fasthosts WordPress hosting:
+  - apex and `www` A `109.228.34.3`, AAAA `2a00:da00:100f:f000::200`
+  - To undo, put those back as DNS only in place of the two Pages CNAMEs. The WordPress hosting has **not** been cancelled or changed.
+- The old Fasthosts zone (not live, kept as a fallback) was also changed on 27 Nov 2026, because some resolvers keep asking Fasthosts for up to 48 hours after the nameserver move:
+  - apex and `www` A records now `172.67.204.244` and `104.21.50.110`, AAAA `2606:4700:3033::6815:326e` (were the WordPress addresses above)
+  - its email records are unchanged (still livemail)
+  - Fasthosts' "Automatic DNS Updates" may put the WordPress addresses back if the hosting package changes. That only matters while resolvers still use Fasthosts.
+- **Email is not part of this site** and still Fasthosts livemail: MX `mailserver.livemail.co.uk`, SPF `v=spf1 mx a include:_spf.livemail.co.uk ~all`, `livemail1-4._domainkey` CNAMEs, `mail`/`mailserver`/`smtp`/`webmail`/`mcp` A records, plus Brevo records (`brevo1/2._domainkey`, `brevo-code` TXT, `_dmarc` with Brevo reporting). All DNS only. Don't change them when working on the website. Email is being moved separately.
+
+## Analytics
+- Cloudflare Web Analytics, automatic setup (added 27 Nov 2026). There's no script in the code and no cookies. The beacon is added by Cloudflare at the edge.
+- Google Search Console: domain property `shaunbrake.com`. It already existed (sitemap from Dec 2023) under another owner; Rich's Google account was verified as an owner on 27 Nov 2026 with the TXT record `google-site-verification=c5vCFX3d...` in Cloudflare DNS. The older `google-site-verification=3XTtWba2...` TXT belongs to the other owner. **Do not delete either.**
+- Sitemap `https://shaunbrake.com/sitemap.xml` submitted on 27 Nov 2026. The old WordPress sitemap `https://shaunbrake.com/page-sitemap.xml` (submitted 20 Dec 2023) is still listed there and now returns 404. It can be removed in Search Console.
+
 ## Working style
 - Plain English, short sentences, UK spelling.
 - Don't change the business's wording, prices or contact details without asking Rich.
