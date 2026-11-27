@@ -27,6 +27,7 @@ Every page repeats the same header (logo, menu with a "What we do" drop-down, ph
 - Keep it simple: static HTML, no frameworks, no third-party scripts.
 
 ## Contact / quote form
+- Web3Forms account `shaunbrake@richietaylor.net` (Free plan), form "SB Construction contact form", access key in the HTML (public, not a secret). Enquiries go to that address, then on to Rich (Rich chose this on 27 Nov 2026; Shaun doesn't receive them directly).
 - On `/contact-us/` and at the bottom of the home page. Fields: name, contact number, email, details. Posts straight to **Web3Forms** (no script); after sending, visitors go to `/thank-you/`. A hidden `botcheck` box catches spam bots. A hidden `page` field says which page it was sent from.
 - The privacy notice names Web3Forms and Cloudflare Web Analytics. Change it if either changes.
 
