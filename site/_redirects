@@ -45,6 +45,8 @@
 /comments/feed/             /                      301
 /wp-sitemap.xml             /sitemap.xml           301
 /sitemap_index.xml          /sitemap.xml           301
+/page-sitemap.xml           /sitemap.xml           301
+/post-sitemap.xml           /sitemap.xml           301
 /wp-content/uploads/2023/11/groundworks1-e1738064498186.jpg /img/groundworks1.jpg 301
 /wp-content/uploads/2023/12/glastonbury-festival-scaled.jpg /img/glastonbury-festival.jpg 301
 /wp-content/uploads/2023/12/android-chrome-192x192-1.png    /img/logo-sb.png 301
