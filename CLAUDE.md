@@ -13,10 +13,12 @@ The site is plain static HTML and CSS. There is no build step: edit the files in
 - `site/`: everything the browser gets.
   - Pages: `/` (home), `/bathrooms/`, `/carpentry/`, `/extensions/`, `/groundworks/`, `/kitchens/`, `/roofing/`, `/portfolio/`, `/contact-us/`, the area pages `/evercreech/`, `/shepton-mallet-builder/`, `/glastonbury/`, `/castle-cary/`, plus `/terms-and-conditions/`, `/privacy/` (new), `/thank-you/` (after the form, noindex), `404.html`.
   - `img/`: all photos (WordPress originals, shrunk to max 1400px), `logo-sb.png` (the blue SB logo).
+  - Root icon files `favicon.ico`, `favicon.svg`, `apple-touch-icon.png`, `icon-192/512.png`, `logo-512.png`, `og-image.png`, `site.webmanifest`: see "Search results and link previews".
   - `style.css`, `app.js` (mobile menu only).
   - `_redirects`: old WordPress and common addresses (e.g. `/contact`, `/cookie-policy-uk/`, `/wp-content/uploads/...` images) to their new homes.
   - `_headers`: Cloudflare security headers.
   - `sitemap.xml` and `robots.txt`: written by `python -I "D:\storage\Claude\Move Domains\tools\make_sitemap.py" site https://shaunbrake.com`. Re-run after adding a page.
+- `scripts/check.js`: search-result checks, run before pushing.
 - `.claude/launch.json`: "site" preview on port 8083. Or run `python -m http.server 8083 --directory site`.
 
 Every page repeats the same header (logo, menu with a "What we do" drop-down, phone button) and footer (call-to-action band, contact details, services, areas). If you change one, change them all (a search and replace across `site/**/index.html`).
@@ -39,6 +41,20 @@ Every page repeats the same header (logo, menu with a "What we do" drop-down, ph
 - Cloudflare Web Analytics, automatic setup (added 27 Nov 2026). There's no script in the code and no cookies. The beacon is added by Cloudflare at the edge.
 - Google Search Console: domain property `shaunbrake.com`. It already existed (sitemap from Dec 2023) under another owner; Rich's Google account was verified as an owner on 27 Nov 2026 with the TXT record `google-site-verification=c5vCFX3d...` in Cloudflare DNS. The older `google-site-verification=3XTtWba2...` TXT belongs to the other owner. **Do not delete either.**
 - Sitemap `https://shaunbrake.com/sitemap.xml` submitted on 27 Nov 2026. The old WordPress sitemap `https://shaunbrake.com/page-sitemap.xml` (submitted 20 Dec 2023) is still listed there and now returns 404. It can be removed in Search Console.
+
+## Search results and link previews
+Added 28 Nov 2026. Everything is a file on the site, no icon services.
+- `site/favicon.svg` redraws the business's real logo (`img/logo-sb.png`, 192 px from WordPress: white serif "SB" on blue `#55aaff`) so the icons can be made at any size. It is not a new design. If Shaun has a bigger or newer logo, swap it in and remake the icons.
+- `favicon.ico` (16/32/48), `apple-touch-icon.png` (180, blue background), `icon-192.png`, `icon-512.png` and `logo-512.png` (schema logo, on white) are made by:
+  `python "D:\storage\Claude\Move Domains\tools\make_icons.py" --svg site/favicon.svg --out site --bg "#55aaff"`
+- `og-image.png` (the link-preview card: logo, "SB Construction South West", and the home page's own heading "Experienced local building & roofing contractor" on the site's dark `#121417` with accent `#31b5c7`) is made by a second run into a scratch folder, then copied to `site/og-image.png`:
+  `python "D:\storage\Claude\Move Domains\tools\make_icons.py" --svg site/favicon.svg --out <scratch folder> --bg "#121417" --accent "#31b5c7" --card-title "SB Construction South West" --card-sub "Experienced local building & roofing contractor"`
+- The tags in each page's `<!-- search-appearance -->` block (icon links, manifest, theme colour, og:/twitter: tags from the page's own title and description; WebSite schema and a HomeAndConstructionBusiness (a kind of LocalBusiness) schema with logo, phone and address on the home page only) and `site/site.webmanifest` are written by the command below. Rerun it after adding a page or changing a title or description. It's safe to rerun. In Git Bash keep the `MSYS_NO_PATHCONV=1` prefix.
+  `MSYS_NO_PATHCONV=1 python "D:\storage\Claude\Move Domains\tools\search_tags.py" --root site --url https://shaunbrake.com --name "SB Construction South West" --short-name "SB Construction" --type HomeAndConstructionBusiness --telephone "07866 925114" --street "Santolina, Enfield Drive" --locality Evercreech --region Somerset --postcode "BA4 6LL" --svg-icon /favicon.svg --theme "#121417"`
+- 404 and thank-you (noindex) get the icons only.
+- **Check before every push:** `node scripts/check.js`. It fails (exit 1) if a page loses its icon, manifest, og: or twitter: tags, the share image or schema logo isn't a real file, the home page has no WebSite schema, favicon.ico has no 48 px size, or an icon is the wrong size.
+- Check it live: `node "D:\storage\Claude\Check Sites\scripts\search-appearance.mjs" shaunbrake.com` (run from the Check Sites folder).
+- Google refreshes favicons and site names on its own schedule, often days to a few weeks.
 
 ## Working style
 - Plain English, short sentences, UK spelling.
