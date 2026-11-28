@@ -33,9 +33,18 @@ Every page repeats the same header (logo, menu with a "What we do" drop-down, ph
   - To undo, put those back as DNS only in place of the two Pages CNAMEs. The WordPress hosting has **not** been cancelled or changed.
 - The old Fasthosts zone (not live, kept as a fallback) was also changed on 27 Nov 2026, because some resolvers keep asking Fasthosts for up to 48 hours after the nameserver move:
   - apex and `www` A records now `172.67.204.244` and `104.21.50.110`, AAAA `2606:4700:3033::6815:326e` (were the WordPress addresses above)
-  - its email records are unchanged (still livemail)
-  - Fasthosts' "Automatic DNS Updates" may put the WordPress addresses back if the hosting package changes. That only matters while resolvers still use Fasthosts.
-- **Email is not part of this site** and still Fasthosts livemail: MX `mailserver.livemail.co.uk`, SPF `v=spf1 mx a include:_spf.livemail.co.uk ~all`, `livemail1-4._domainkey` CNAMEs, `mail`/`mailserver`/`smtp`/`webmail`/`mcp` A records, plus Brevo records (`brevo1/2._domainkey`, `brevo-code` TXT, `_dmarc` with Brevo reporting). All DNS only. Don't change them when working on the website. Email is being moved separately.
+  - its MX and SPF were changed on 28 Nov 2026 to the same Cloudflare Email Routing values (see Email)
+  - Fasthosts' "Automatic DNS Updates" may put the WordPress addresses back if the hosting package changes. That - Email is set up separately; see **Email** below. Don't change the email DNS records when working on the website.g on the website. Email is being moved separately.
+
+## Email
+Set up 28 Nov 2026. It replaced the Fasthosts livemail forwarders (website@, form@, shaun@, email@ and a catch-all, which went to Shaun's Gmail/iCloud). Rich chose one catch-all, like his other sites; Shaun's own mailboxes are no longer used.
+- Cloudflare Email Routing: **catch-all → shaunbrake@richietaylor.net** (enabled), which reaches Rich's Gmail. No per-address rules. Destination verified 28 Nov 2026.
+- DNS (Cloudflare, DNS only): MX `route1.mx.cloudflare.net` (73), `route2` (15), `route3` (62); DKIM TXT `cf2024-1._domainkey`; SPF `v=spf1 include:_spf.mx.cloudflare.net ~all` (the only SPF). The routing-managed records are locked by Cloudflare.
+- Kept: `_dmarc` `v=DMARC1; p=none; rua=mailto:rua@dmarc.brevo.com`, `brevo1/2._domainkey` CNAMEs, `brevo-code` TXT, both `google-site-verification` TXTs. The old `livemail1-4._domainkey` CNAMEs and `mail`/`mailserver`/`smtp`/`webmail`/`mcp` A records are still there and do no harm.
+- No "Send mail as" / SMTP2GO for this domain, so mail can't be sent from @shaunbrake.com. If that's wanted later, SPF would need SMTP2GO added.
+- The old Fasthosts zone has the same MX and SPF (for resolvers still asking Fasthosts in the first 48 hours).
+- The Fasthosts WordPress hosting (which carried the old forwarders) can be cancelled now routing works. Cancelling it is Rich's call.
+- Notes: `D:\storage\Claude\Move Domains\shaunbrake.com\email.md`.
 
 ## Analytics
 - Cloudflare Web Analytics, automatic setup (added 27 Nov 2026). There's no script in the code and no cookies. The beacon is added by Cloudflare at the edge.
